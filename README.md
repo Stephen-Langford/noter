@@ -9,6 +9,9 @@ best source for notes:
 https://pianoletternotes.blogspot.com/
 https://pianoletternotes.blogspot.com/2023/11/itsy-bitsy-spider.html
 
+learning what notes actually are:
+https://www.music-theory-for-musicians.com/music-alphabet.html
+
 
 ####Installing Tone.js library:
 npm install tone
