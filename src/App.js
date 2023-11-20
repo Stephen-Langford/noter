@@ -1,44 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import { tone } from './tones'; // Assuming tones.js is in the src directory
+import * as Tone from 'tone';
 
 function App() {
   const [text, setText] = useState('');
-  const [audioContext, setAudioContext] = useState(null);
-
-  useEffect(() => {
-    setAudioContext(new (window.AudioContext || window.webkitAudioContext)());
-  }, []);
+  const [instrumentType, setInstrumentType] = useState('sine');
+  const synth = new Tone.Synth().toDestination();
 
   const handleTextChange = (event) => {
     setText(event.target.value);
   };
 
-  const playNote = (frequency, duration = 500, delay = 0) => {
-    setTimeout(() => {
-      const oscillator = audioContext.createOscillator();
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-      oscillator.connect(audioContext.destination);
-      oscillator.start();
-      oscillator.stop(audioContext.currentTime + duration / 1000);
-    }, delay);
+  const playNote = (note, duration = '8n', time = Tone.now()) => {
+    synth.oscillator.type = instrumentType;
+    synth.triggerAttackRelease(note, duration, time);
   };
-  
+
   const handleSubmit = () => {
+    Tone.start();
+
+    let time = Tone.now();
     const textUpperCase = text.toUpperCase();
-    let delay = 0;
+
     for (const char of textUpperCase) {
-      if (tone[char]) {
-        const octave = 4;
-        const frequency = tone[char][octave];
-        playNote(frequency, 500, delay);
-        delay += 600; // Add a delay for the next note
+      const note = char + '4';
+      if (Tone.Frequency(note).toFrequency()) {
+        playNote(note, '8n', time);
+        time += Tone.Time('8n').toSeconds();
       }
     }
   };
-  
-  
 
   return (
     <div className="App">
@@ -47,8 +38,20 @@ function App() {
       </header>
       <main>
         <textarea value={text} onChange={handleTextChange} placeholder="Type your notes here..." />
+        <div>
+          <label htmlFor="instrument-select">Choose an instrument: </label>
+          <select id="instrument-select" value={instrumentType} onChange={(e) => setInstrumentType(e.target.value)}>
+            <option value="sine">Sine Wave</option>
+            <option value="square">Square Wave</option>
+            <option value="sawtooth">Sawtooth Wave</option>
+            <option value="triangle">Triangle Wave</option>
+          </select>
+        </div>
         <button onClick={handleSubmit}>Submit</button>
       </main>
+      <footer>
+        <a target="_blank" href="https://icons8.com/icon/12783/music">Music</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+      </footer>
     </div>
   );
 }

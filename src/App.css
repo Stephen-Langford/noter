@@ -1,20 +1,24 @@
 .App {
   text-align: center;
+  background-color: #08D9D6;
 }
 
+
+
 .App-header {
-  background-color: #282c34;
+  background-color: #252A34;
   min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #FF2E63;
 }
 
 main {
   margin: 20px;
+  min-height: 90vh; 
 }
 
 textarea {
@@ -25,4 +29,8 @@ textarea {
 
 button {
   margin: 5px;
+}
+
+footer {
+  flex-direction: row-reverse;;
 }
